@@ -44,7 +44,6 @@ static HANDLE count_mutex		= NULL;
 DWORD Costumer_thread(LPSTR lpparam);
 
 /*
-* int firstDayPreperation(int room_index, int room_size).
 * This function update the variables num_people_entering_today and room_waiting_list
 * before the first day starts, under mutex protection.
 *
@@ -71,7 +70,6 @@ int preFirstDayBarrier(int num_costumers);
 
 
 /*
-* int tryToEnterTheRoom(int room_index, HANDLE room_semaphore).
 * This function "try to enter the room" by doing wait on the room semaphore
 *
 * Input Arguments :
@@ -85,7 +83,6 @@ int tryToEnterTheRoom(costumer* costumer, hotel* hotel);
 
 
 /*
-* int writeToFileIn(costumer* costumer, hotel* hotel);
 * This function write that the costumer entered the room.
 *
 * Input Arguments :
@@ -100,7 +97,6 @@ int writeToFile(costumer* costumer, hotel* hotel, int in_out);
 
 
 /*
-* int fillOutDay(costumer* costumer, hotel* hotel)
 * This function calculate the day this costumer will exit the hotel and fill the exit day
 * in the out_days array
 *
@@ -113,7 +109,6 @@ int writeToFile(costumer* costumer, hotel* hotel, int in_out);
 int fillOutDay(costumer* costumer, hotel* hotel);
 
 /*
-* int checkEndOfDay(costumer, hotel)
 * This function add 1 to the count and check if the numer of people that entered today
 * is equal to the expected number of people to enter. if it does it Signals God thread to change the day.
 *
@@ -124,5 +119,28 @@ int fillOutDay(costumer* costumer, hotel* hotel);
 *	return -1 if error accord
 */
 int checkEndOfDay(costumer* costumer, hotel* hotel);
+
+
+/*
+* This function waits until the God thred release it when the day to exit will come.
+*
+* Input Arguments :
+*	costumer:		pointer to the costumer structure.
+*	hotel:			pointer to the global hotel structure.
+* Return :
+*	return -1 if error accord
+*/
+int accommodateRoom(costumer* costumer, hotel* hotel);
+
+/*
+* This function releases the room semaphore by 1
+*
+* Input Arguments :
+*	costumer:		pointer to the costumer structure.
+*	hotel:			pointer to the global hotel structure.
+* Return :
+*	return -1 if error accord
+*/
+int freeRoom(costumer* costumer, hotel* hotel);
 
 #endif // __THREADFUNCTIONS_H___

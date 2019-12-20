@@ -59,9 +59,11 @@ DWORD Costumer_thread(LPSTR lpParam)
 
 	ret_val = writeToFile(costumer, hotel, OUT);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
-	// accommodate 
-}
 
+
+	ret_val = freeRoom(costumer, hotel);
+	if (ret_val == ERROR_CODE) return ERROR_CODE;
+}
 
 int firstDayPreperation(costumer* costumer, hotel* hotel)
 {
@@ -237,7 +239,9 @@ int fillOutDay(costumer* costumer, hotel* hotel)
 	out_day = total_days + day;
 
 	/* fill the out_days array*/
-	out_days[costumer->index] = outday;
+	out_days[costumer->index] = out_day;
+
+	return 0;
 }
 
 int checkEndOfDay(costumer* costumer, hotel* hotel)
@@ -270,9 +274,34 @@ int checkEndOfDay(costumer* costumer, hotel* hotel)
 		printf("Error when releasing count_mutex\n");
 		return ERROR_CODE;
 	}
+	return 0;
 }
 
-int accommodateRoom(costumer* costumer, hotel* hotel);
+int accommodateRoom(costumer* costumer, hotel* hotel)
+{
+	DWORD wait_code;
+	BOOL ret_val;
+	int my_index;
+	my_index = costumer->index;
 
+	wait_code = WaitForSingleObject(checkout[my_index], INFINITE);
+	if (WAIT_OBJECT_0 != wait_code)
+	{
+		printf("Error when waiting for %d checkout mutex\n");
+		return ERROR_CODE;
+	}
+}
 
+int freeRoom(costumer* costumer, hotel* hotel)
+{
+	BOOL ret_val;
+	int room_index = costumer->index;
+	ret_val = ReleaseMutex(hotel->rooms_sem[room_index]);
+	if (FALSE == ret_val)
+	{
+		printf("Error when releasing  %d room semaphore\n", room_index);
+		return ERROR_CODE;
+	}
+	return 0;
+}
 
