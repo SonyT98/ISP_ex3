@@ -44,7 +44,6 @@ static HANDLE count_mutex		= NULL;
 DWORD Costumer_thread(LPSTR lpparam);
 
 /*
-* int firstDayPreperation(int room_index, int room_size).
 * This function update the variables num_people_entering_today and room_waiting_list
 * before the first day starts, under mutex protection.
 *
@@ -56,7 +55,7 @@ DWORD Costumer_thread(LPSTR lpparam);
 */
 
 
-int firstDayPreperation(costumer* costumer, hotel* hotel);
+int firstDayPreperation(struct costumer* costumer, struct hotel* hotel);
 
 /*
 * int preFirstDayBarrier(int num_costumers)
@@ -71,7 +70,6 @@ int preFirstDayBarrier(int num_costumers);
 
 
 /*
-* int tryToEnterTheRoom(int room_index, HANDLE room_semaphore).
 * This function "try to enter the room" by doing wait on the room semaphore
 *
 * Input Arguments :
@@ -80,12 +78,11 @@ int preFirstDayBarrier(int num_costumers);
 * Return :
 *	return -1 if error accord
 */
-int tryToEnterTheRoom(costumer* costumer, hotel* hotel);
+int tryToEnterTheRoom(struct costumer* costumer, struct  hotel* hotel);
 
 
 
 /*
-* int writeToFileIn(costumer* costumer, hotel* hotel);
 * This function write that the costumer entered the room.
 *
 * Input Arguments :
@@ -96,11 +93,10 @@ int tryToEnterTheRoom(costumer* costumer, hotel* hotel);
 * Return :
 *	return -1 if error accord
 */
-int writeToFile(costumer* costumer, hotel* hotel, int in_out);
+int writeToFile(struct costumer* costumer,struct  hotel* hotel, int in_out);
 
 
 /*
-* int fillOutDay(costumer* costumer, hotel* hotel)
 * This function calculate the day this costumer will exit the hotel and fill the exit day
 * in the out_days array
 *
@@ -110,10 +106,9 @@ int writeToFile(costumer* costumer, hotel* hotel, int in_out);
 * Return :
 *	return -1 if error accord
 */
-int fillOutDay(costumer* costumer, hotel* hotel);
+int fillOutDay(struct costumer* costumer, struct  hotel* hotel);
 
 /*
-* int checkEndOfDay(costumer, hotel)
 * This function add 1 to the count and check if the numer of people that entered today
 * is equal to the expected number of people to enter. if it does it Signals God thread to change the day.
 *
@@ -123,6 +118,29 @@ int fillOutDay(costumer* costumer, hotel* hotel);
 * Return :
 *	return -1 if error accord
 */
-int checkEndOfDay(costumer* costumer, hotel* hotel);
+int checkEndOfDay(struct costumer* costumer,struct  hotel* hotel);
+
+
+/*
+* This function waits until the God thred release it when the day to exit will come.
+*
+* Input Arguments :
+*	costumer:		pointer to the costumer structure.
+*	hotel:			pointer to the global hotel structure.
+* Return :
+*	return -1 if error accord
+*/
+int accommodateRoom(struct costumer* costumer,struct  hotel* hotel);
+
+/*
+* This function releases the room semaphore by 1
+*
+* Input Arguments :
+*	costumer:		pointer to the costumer structure.
+*	hotel:			pointer to the global hotel structure.
+* Return :
+*	return -1 if error accord
+*/
+int freeRoom(struct costumer* costumer, struct  hotel* hotel);
 
 #endif // __THREADFUNCTIONS_H___
