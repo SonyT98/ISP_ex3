@@ -63,6 +63,8 @@ DWORD Costumer_thread(LPSTR lpParam)
 
 	ret_val = freeRoom(costumer, hotel);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
+
+	return 0;
 }
 
 int firstDayPreperation(costumer* costumer, hotel* hotel)

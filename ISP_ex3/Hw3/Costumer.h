@@ -55,7 +55,7 @@ DWORD Costumer_thread(LPSTR lpparam);
 */
 
 
-int firstDayPreperation(costumer* costumer, hotel* hotel);
+int firstDayPreperation(struct costumer* costumer, struct hotel* hotel);
 
 /*
 * int preFirstDayBarrier(int num_costumers)
@@ -78,7 +78,7 @@ int preFirstDayBarrier(int num_costumers);
 * Return :
 *	return -1 if error accord
 */
-int tryToEnterTheRoom(costumer* costumer, hotel* hotel);
+int tryToEnterTheRoom(struct costumer* costumer, struct  hotel* hotel);
 
 
 
@@ -93,7 +93,7 @@ int tryToEnterTheRoom(costumer* costumer, hotel* hotel);
 * Return :
 *	return -1 if error accord
 */
-int writeToFile(costumer* costumer, hotel* hotel, int in_out);
+int writeToFile(struct costumer* costumer,struct  hotel* hotel, int in_out);
 
 
 /*
@@ -106,7 +106,7 @@ int writeToFile(costumer* costumer, hotel* hotel, int in_out);
 * Return :
 *	return -1 if error accord
 */
-int fillOutDay(costumer* costumer, hotel* hotel);
+int fillOutDay(struct costumer* costumer, struct  hotel* hotel);
 
 /*
 * This function add 1 to the count and check if the numer of people that entered today
@@ -118,7 +118,7 @@ int fillOutDay(costumer* costumer, hotel* hotel);
 * Return :
 *	return -1 if error accord
 */
-int checkEndOfDay(costumer* costumer, hotel* hotel);
+int checkEndOfDay(struct costumer* costumer,struct  hotel* hotel);
 
 
 /*
@@ -130,7 +130,7 @@ int checkEndOfDay(costumer* costumer, hotel* hotel);
 * Return :
 *	return -1 if error accord
 */
-int accommodateRoom(costumer* costumer, hotel* hotel);
+int accommodateRoom(struct costumer* costumer,struct  hotel* hotel);
 
 /*
 * This function releases the room semaphore by 1
@@ -141,6 +141,6 @@ int accommodateRoom(costumer* costumer, hotel* hotel);
 * Return :
 *	return -1 if error accord
 */
-int freeRoom(costumer* costumer, hotel* hotel);
+int freeRoom(struct costumer* costumer, struct  hotel* hotel);
 
 #endif // __THREADFUNCTIONS_H___
