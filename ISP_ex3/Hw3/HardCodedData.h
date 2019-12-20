@@ -7,6 +7,10 @@
 #define MAX_NUM_ROOMS 5
 #define MAX_NUM_ROOM_NAME 20
 
+#define IN 5
+#define OUT 7
+
+
 typedef struct
 {
 	char *name;

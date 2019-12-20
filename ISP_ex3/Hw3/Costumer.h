@@ -29,10 +29,9 @@ static HANDLE barrier_semaphore = NULL;
 static int barrier_count		= 0;
 
 // Mutex for critical reign  
-
 static HANDLE file_mutex		= NULL;
 static HANDLE a_mutex			= NULL;
-
+static HANDLE count_mutex		= NULL;
 
 /*
 *	Costumer is the thread of each costumer that want to enter the 
@@ -92,10 +91,12 @@ int tryToEnterTheRoom(costumer* costumer, hotel* hotel);
 * Input Arguments :
 *	costumer:		pointer to the costumer structure.
 *	hotel:			pointer to the global hotel structure.
+*	in_out:			if equal IN the input line will be written
+					if equal OUT the output line will be written
 * Return :
 *	return -1 if error accord
 */
-int writeToFileIn(costumer* costumer, hotel* hotel);
+int writeToFile(costumer* costumer, hotel* hotel, int in_out);
 
 
 /*
@@ -111,5 +112,17 @@ int writeToFileIn(costumer* costumer, hotel* hotel);
 */
 int fillOutDay(costumer* costumer, hotel* hotel);
 
+/*
+* int checkEndOfDay(costumer, hotel)
+* This function add 1 to the count and check if the numer of people that entered today
+* is equal to the expected number of people to enter. if it does it Signals God thread to change the day.
+*
+* Input Arguments :
+*	costumer:		pointer to the costumer structure.
+*	hotel:			pointer to the global hotel structure.
+* Return :
+*	return -1 if error accord
+*/
+int checkEndOfDay(costumer* costumer, hotel* hotel);
 
 #endif // __THREADFUNCTIONS_H___
