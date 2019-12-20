@@ -3,6 +3,7 @@
 #include "ThreadFunctions.h"
 #include "HardCodedData.h"
 #include "Functions.h"
+#include "Costumer.h"
 
 // Function Definitions --------------------------------------------------------
 
@@ -125,4 +126,35 @@ int FreeArrayOfPointers(costumer **arr, int index)
 	{
 		free(arr[i]);
 	}
+}
+
+
+int SemaphoreIntialize(hotel *our_hotel, int num_of_costumers)
+{
+	int i = 0, ret = 0, j = 0;
+	int num_of_rooms = our_hotel->number_of_rooms;
+
+	//first we will intialize the rooms semaphore to their size
+	for (i = 0; i < num_of_rooms; i++)
+	{
+		our_hotel->rooms_sem[i] = CreateSemaphore(NULL, our_hotel->rooms_size[i],
+			our_hotel->rooms_size[i], NULL);
+		if (our_hotel->rooms_sem[i] == NULL)
+		{
+			printf("Error creating semaphore\n");
+			ret = ERROR_CODE;
+			for (j = 0; j < i; j++)
+				free(our_hotel->rooms_sem[i]);
+			goto ret_goto;
+		}
+
+	}
+
+	/*------------------------Global Semaphores--------------------------*/
+	god_signal = CreateSemaphore(NULL,0,1, NULL);
+	first_day_barrier = CreateSemaphore(NULL, 0, 1, NULL);
+
+
+ret_goto:
+	return ret;
 }

@@ -120,7 +120,8 @@ int preFirstDayBarrier(int num_costumers)
 		{
 			printf("Error when releasing barrier_semaphore\n");
 			return ERROR_CODE;
-		}
+		}
+
 	}
 	// up(mutex)
 	ret_val = ReleaseMutex(barrier_mutex);
