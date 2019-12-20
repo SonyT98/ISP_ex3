@@ -4,10 +4,13 @@
 #include "HardCodedData.h"
 #include "Costumer.h"
 
-DWORD Costumer(LPSTR lpParam)
+DWORD Costumer_thread(LPSTR lpParam)
 {
 	Costumer_arg *parameters = (Costumer_arg *)lpParam;
-	int my_room, index, my_room_size;
+	costumer* costumer;
+	hotel* hotel;
+
+	int num_costumers;
 	HANDLE my_room_sem = NULL;
 	DWORD wait_code;
 	int ret_val;
@@ -23,13 +26,11 @@ DWORD Costumer(LPSTR lpParam)
 	parameters = (Costumer_arg *)lpParam;
 	
 	/* Convert the structure variable into local variables */
-	my_room = parameters->costumer->my_room;
-	index = parameters->costumer->index;
-	my_room_sem = parameters->hotel->rooms_sem[my_room];
-	my_room_size = parameters->hotel->rooms_size[my_room];
+	costumer = parameters->costumer;
+	hotel	 = parameters->hotel;
+	num_costumers = parameters->N_costumers;
 
-	/* find the total number */
-	ret_val =  firstDayFill(my_room, my_room_size);
+	ret_val =  firstDayFill(costumer,hotel);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
 	/* barrier before first day starts */
@@ -39,20 +40,27 @@ DWORD Costumer(LPSTR lpParam)
 	/* ---ALL THREADS STARTS TOGETHER HERE--- */
 
 	/* try to enter the room if room is full wait until someone gets out */
-	ret_val = tryToEnterTheRoom(my_room, my_room_sem);
+	ret_val = tryToEnterTheRoom(costumer,hotel);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
+	/* -- Entered the room --*/
+	ret_val = writeToFileIn(costumer, hotel);
+	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
-
+	ret_val = fillOutDay(costumer, hotel);
+	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
 }
 
 
-int firstDayPreperation(int room_index, int room_size)
+int firstDayPreperation(costumer* costumer, hotel* hotel)
 {
 
 	DWORD wait_code;
 	BOOL ret_val;
+	int room_index = costumer->my_room;
+	int room_size = hotel->rooms_size[room_index];
+
 
 	wait_code = WaitForSingleObject(a_mutex, INFINITE);
 	if (WAIT_OBJECT_0 != wait_code)
@@ -76,16 +84,17 @@ int firstDayPreperation(int room_index, int room_size)
 		printf("Error when releasing a_mutex\n");
 		return ERROR_CODE;
 	}
+
+	return 0;
 }
 
-
-int preFirstDayBarrier()
+int preFirstDayBarrier(int num_costumers)
 {
 	DWORD wait_code;
 	BOOL ret_val;
 	
 	// down(mutex)
-	wait_code = WaitForSingleObject(barrier_mutex);
+	wait_code = WaitForSingleObject(barrier_mutex, INFINITE);
 	if (WAIT_OBJECT_0 != wait_code)
 	{
 		printf("Error when waiting for barrier_mutex\n");
@@ -111,25 +120,101 @@ int preFirstDayBarrier()
 		return ERROR_CODE;
 	}
 	// down(barrier)
-	wait_code = WaitForSingleObject(barrier_semaphore);
+	wait_code = WaitForSingleObject(barrier_semaphore, INFINITE);
 	if (WAIT_OBJECT_0 != wait_code)
 	{
 		printf("Error when waiting for barrier_semaphore\n");
 		return ERROR_CODE;
 	}
-
+	return 0;
 }
 
-int tryToEnterTheRoom(int room_index, HANDLE room_semaphore)
+int tryToEnterTheRoom(costumer* costumer, hotel* hotel)
 {
 	DWORD wait_code;
 	BOOL ret_val;
+	int room_index = costumer->my_room;
 
-	wait_code = WaitForSingleObject(room_semaphore);
+	wait_code = WaitForSingleObject(hotel->rooms_sem[room_index], INFINITE);
 	if (WAIT_OBJECT_0 != wait_code)
 	{
 		printf("Error when waiting for the %d room semaphore\n",room_index);
 		return ERROR_CODE;
 	}
 
+	return 0;
+}
+
+int writeToFileIn(costumer* costumer, hotel* hotel)
+{
+
+	DWORD wait_code;
+	BOOL ret_val;
+
+	FILE* fp = NULL;
+	int room_index = costumer->my_room;
+	char* room_name, *costumer_name;
+	int ret = 0, error_flag = 0;
+
+	/* extract needed variables */
+	room_index = costumer->my_room;
+	room_name = hotel->room_names[room_index];
+	costumer_name = costumer->name;
+
+	wait_code = WaitForSingleObject(file_mutex, INFINITE);
+	if (WAIT_OBJECT_0 != wait_code)
+	{
+		printf("Error when waiting for a_mutex\n");
+		ret = ERROR_CODE;
+		goto err0;
+	}
+	/*** critical Regan ***/
+
+
+	//opening roomLog.txt file
+	error_flag = fopen_s(&rooms_file, "roomLog.txt", "w");
+	if (rooms_file == NULL)// check fopen failure 
+	{
+		printf("Error opening File - roomLog.txt\n");
+		ret = ERROR_CODE;
+		goto err1;
+	}
+
+	error_flag  = fprintf_s("%s %s IN %d\n", room_name, costumer_name, day);
+	if (error_flag < 0)
+	{
+		printf("Error when writing to roomLog.txt\n");
+		ret = ERROR_CODE;
+	}
+
+	/* close file */
+	fclose(fp);
+
+err1: /* exit critical section */
+	ret_val = ReleaseMutex(a_mutex);
+	if (FALSE == ret_val)
+	{
+		printf("Error when releasing a_mutex\n");
+		ret  = ERROR_CODE;
+	}
+err0:
+	return ret;
+}
+
+int fillOutDay(costumer* costumer, hotel* hotel)
+{
+	DWORD wait_code;
+	BOOL ret_val;
+	int room_index, room_price, costumer_money, total_days, out_day;
+	/* extract variables */ 
+	room_index = costumer->my_room;
+	costumer_money = costumer->money;
+	room_price = hotel->price_per_person[room_index];
+
+	/* calculate exit day*/
+	total_days = costumer_money / room_price;
+	out_day = total_days + day;
+
+	/* fill the out_days array*/
+	out_days[costumer->index] = outday;
 }
