@@ -14,8 +14,9 @@ typedef struct
 
 typedef struct
 {
-	char **romm_names;
-	HANDLE *romms_sem;
+	char **room_names;
+	HANDLE *rooms_sem;
+	int *rooms_size;
 	int *price_per_person;
 	int number_of_rooms;
 } hotel;
@@ -25,6 +26,6 @@ typedef struct
 	hotel *hotel;
 	costumer *costumer;
 	int N_costumers;
-} thread_arg;
+} Costumer_arg;
 
 #endif // __HARDCODEDDATA_H___

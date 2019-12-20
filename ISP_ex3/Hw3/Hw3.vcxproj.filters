@@ -24,7 +24,7 @@
     <ClCompile Include="Functions.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Consumer.c">
+    <ClCompile Include="Costumer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,13 +32,13 @@
     <ClInclude Include="HardCodedData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ThreadFunctions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Consumer.h">
+    <ClInclude Include="Costumer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
