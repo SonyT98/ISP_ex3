@@ -5,11 +5,12 @@
 #define ERROR_CODE ((int)(-1))
 #define MAX_LINE_LENGTH 50
 #define MAX_NUM_ROOMS 5
-#define MAX_NUM_ROOM_NAME 20
+#define MAX_ROOM_NAME 20
+#define MAX_NUM_COSTUMERS 15
 
 typedef struct
 {
-	char *name;
+	char name[MAX_LINE_LENGTH];
 	int money;
 	int index;
 	int my_room;
@@ -17,10 +18,10 @@ typedef struct
 
 typedef struct
 {
-	char **room_names;
-	HANDLE *rooms_sem;
-	int *rooms_size;
-	int *price_per_person;
+	char room_names[MAX_NUM_ROOMS][MAX_ROOM_NAME];
+	HANDLE rooms_sem[MAX_NUM_ROOMS];
+	int rooms_size[MAX_NUM_ROOMS];
+	int price_per_person[MAX_NUM_ROOMS];
 	int number_of_rooms;
 } hotel;
 
