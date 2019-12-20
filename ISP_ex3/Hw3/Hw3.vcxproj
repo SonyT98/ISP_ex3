@@ -115,10 +115,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Functions.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="ThreadFunctions.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Functions.h" />
     <ClInclude Include="HardCodedData.h" />
     <ClInclude Include="ThreadFunctions.h" />
   </ItemGroup>

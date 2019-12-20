@@ -9,6 +9,8 @@
 #include <windows.h>
 #include <limits.h>
 #include <string.h>
+#include <tchar.h>
+#include <stdlib.h>
 
 // Function Declarations -------------------------------------------------------
 
