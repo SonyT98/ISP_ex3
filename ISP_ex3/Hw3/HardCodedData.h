@@ -8,6 +8,10 @@
 #define MAX_ROOM_NAME 20
 #define MAX_NUM_COSTUMERS 15
 
+#define IN 5
+#define OUT 7
+
+
 typedef struct
 {
 	char name[MAX_LINE_LENGTH];
