@@ -24,6 +24,9 @@
     <ClCompile Include="Functions.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Consumer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HardCodedData.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Consumer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
