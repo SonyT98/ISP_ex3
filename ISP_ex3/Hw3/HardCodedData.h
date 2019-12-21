@@ -36,4 +36,11 @@ typedef struct
 	int N_costumers;
 } Costumer_arg;
 
+typedef struct
+{
+	costumer **costumers;
+	int N_costumers;
+} God_arg;
+
+
 #endif // __HARDCODEDDATA_H___

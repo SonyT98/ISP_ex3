@@ -117,12 +117,14 @@
   <ItemGroup>
     <ClCompile Include="Costumer.c" />
     <ClCompile Include="Functions.c" />
+    <ClCompile Include="God.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="ThreadFunctions.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Costumer.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="God.h" />
     <ClInclude Include="HardCodedData.h" />
     <ClInclude Include="ThreadFunctions.h" />
   </ItemGroup>

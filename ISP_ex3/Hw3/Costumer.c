@@ -6,7 +6,7 @@
 
 DWORD Costumer_thread(LPSTR lpParam)
 {
-	Costumer_arg *parameters = (Costumer_arg *)lpParam;
+	Costumer_arg *parameters = NULL;
 	costumer* costumer;
 	hotel* hotel;
 
