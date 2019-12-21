@@ -47,11 +47,37 @@ int FreeArrayOfPointers(struct costumer **arr, int index);
 /*
 * SemaphoreIntialize intialie all the semaphores and mutex to the wanted values.
 * Input Arguments:
-*	our_hotel			- intialize the semaphores of the room.
+*	our_hotel			- intialize the semaphores of the rooms.
 *	number_of_costumers - number of costumers.
 * Output:
 *	return -1 if failed;
 */
 int SemaphoreIntialize(struct hotel *our_hotel, int number_of_costumers);
+
+/*
+* CreateCostumersAndGodArg set the god and costumers arguments (to the threads)
+* to the wanted values.
+* Input Arguments:
+*	our_hotel - the hotel structure we created.
+*	our_costumers - the array of costumers structure we created.
+*	n_costumers - number of costumers.
+*	c_arg - costumer argument.
+*	g_arg - god argument.
+* Output:
+*	return -1 if there is an error.
+*/
+int CreateCostumersAndGodArg(struct hotel *our_hotel,struct costumer **our_costumers, int n_costumers,
+	struct Costumer_arg ***c_arg,struct God_arg **g_arg);
+
+/*
+* FindMyRoom set the room for every costumer according to their money.
+* Input Arguments:
+*	our_hotel - the hotel structure we created.
+*	our_costumers - the array of costumers structure we created.
+*	n_costumers - number of costumers.
+* Output:
+*	return -1 if there is an error.
+*/
+int FindMyRoom(struct hotel *our_hotel, struct costumer **our_costumers, int n_costumers);
 
 #endif // __FUNCTIONS_H___

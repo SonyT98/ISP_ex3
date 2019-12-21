@@ -23,12 +23,17 @@
 int main()
 {
 	costumer **costumers = NULL;
-	costumer *me = NULL;
 	hotel *my_hotel = NULL;
+	Costumer_arg **c_arg = NULL;
+	God_arg *g_arg = NULL;
+	char *c = NULL;
+
 	int n = 0, err = 0, wait_res = 0;
 
 	err = GetHotel(&my_hotel);
 	err = GetCostumers(&costumers,&n);
 	err = SemaphoreIntialize(my_hotel, n);
+	err = CreateCostumersAndGodArg(my_hotel, costumers, n, &c_arg, &g_arg);
+	err = FindMyRoom(my_hotel, costumers, n);
 	return 0;
 }

@@ -212,3 +212,80 @@ err_room_sem:
 ret_goto:
 	return ret;
 }
+
+int CreateCostumersAndGodArg(hotel *our_hotel, costumer **our_costumers, int n_costumers,
+	Costumer_arg ***c_arg, God_arg **g_arg)
+{
+	//variables
+	int ret = 0, i = 0, j = 0;
+
+	//allocate space for costumer_arg array
+	(*c_arg) = (Costumer_arg**)malloc(n_costumers*sizeof(Costumer_arg*));
+	if (*c_arg == NULL)
+	{
+		printf("Error allocating memory for costumer_arg struct\n");
+		ret = ERROR_CODE;
+		goto ret_goto;
+	}
+
+	//go over the costumer arg array and fill it accordinly.
+	for (i = 0; i < n_costumers; i++)
+	{
+		(*c_arg)[i] = (Costumer_arg*)malloc(sizeof(Costumer_arg));
+		if ((*c_arg)[i] == NULL)
+		{
+			printf("Error allocating memory for costumer_arg struct\n");
+			ret = ERROR_CODE;
+			goto err_malloc_c_arg;
+		}
+		(*c_arg)[i]->costumer = our_costumers[i];
+		(*c_arg)[i]->hotel = our_hotel;
+		(*c_arg)[i]->N_costumers = n_costumers;
+	}
+
+	//allocate space for costumer_arg array
+	(*g_arg) = (God_arg*)malloc(sizeof(God_arg));
+	if (*g_arg == NULL)
+	{
+		printf("Error allocating memory for god_arg struct\n");
+		ret = ERROR_CODE;
+		goto err_malloc_c_arg;
+	}
+
+	(*g_arg)->costumers = our_costumers;
+	(*g_arg)->N_costumers = n_costumers;
+
+	if (ret == 0)
+		goto ret_goto;
+
+err_malloc_c_arg:
+	for (j = 0; j < i; j++)
+		free((*c_arg)[j]);
+	free((*c_arg));
+ret_goto:
+	return ret;
+}
+
+int FindMyRoom(hotel *our_hotel, costumer **our_costumers, int n_costumers)
+{
+	int i = 0, j = 0;;
+	int num_rooms = 0, room_price = 0;
+	costumer *cur_costumer = NULL;
+
+	num_rooms = our_hotel->number_of_rooms;
+
+	for (i = 0; i < n_costumers; i++)
+	{
+		cur_costumer = our_costumers[i];
+		for (j = 0; j < num_rooms; j++)
+		{
+			room_price = our_hotel->price_per_person[j];
+			if (cur_costumer->money % room_price == 0)
+			{
+				cur_costumer->my_room = j;
+				break;
+			}
+		}
+	}
+	return 0;
+}
