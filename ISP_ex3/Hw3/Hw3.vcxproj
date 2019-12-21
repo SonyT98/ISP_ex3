@@ -117,6 +117,7 @@
   <ItemGroup>
     <ClCompile Include="Costumer.c" />
     <ClCompile Include="Functions.c" />
+    <ClCompile Include="GlobalVariables.c" />
     <ClCompile Include="God.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="ThreadFunctions.c" />
@@ -124,6 +125,7 @@
   <ItemGroup>
     <ClInclude Include="Costumer.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="GlobalVariables.h" />
     <ClInclude Include="God.h" />
     <ClInclude Include="HardCodedData.h" />
     <ClInclude Include="ThreadFunctions.h" />

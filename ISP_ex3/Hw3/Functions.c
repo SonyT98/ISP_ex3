@@ -4,6 +4,7 @@
 #include "HardCodedData.h"
 #include "Functions.h"
 #include "Costumer.h"
+#include "GlobalVariables.h"
 
 // Function Definitions --------------------------------------------------------
 
@@ -131,8 +132,10 @@ int FreeArrayOfPointers(costumer **arr, int index)
 
 int SemaphoreIntialize(hotel *our_hotel, int num_of_costumers)
 {
-	int i = 0, ret = 0, j = 0;
+	int i = 0, ret = 0, j = 0, m = 0;
 	int num_of_rooms = our_hotel->number_of_rooms;
+
+	day = 6;
 
 	//first we will intialize the rooms semaphore to their size
 	for (i = 0; i < num_of_rooms; i++)
@@ -143,19 +146,69 @@ int SemaphoreIntialize(hotel *our_hotel, int num_of_costumers)
 		{
 			printf("Error creating semaphore\n");
 			ret = ERROR_CODE;
-			for (j = 0; j < i; j++)
-				free(our_hotel->rooms_sem[i]);
-			goto ret_goto;
+			goto err_room_sem;
 		}
 
 	}
 
 	/*------------------------Global Semaphores--------------------------*/
 	god_signal = CreateSemaphore(NULL,0,1, NULL);
-	first_day_barrier = CreateSemaphore(NULL, 0, 1, NULL);
+	if (god_signal == NULL)
+	{ printf("Error creating semaphore\n"); ret = ERROR_CODE; goto err_room_sem;}
+	
+	barrier_semaphore = CreateSemaphore(NULL, 0, num_of_costumers, NULL);
+	if (barrier_semaphore == NULL)
+	{ printf("Error creating semaphore\n"); ret = ERROR_CODE; goto err_bar_sem; }
+
+
+	for (m = 0; m < num_of_costumers; m++)
+	{
+		checkout[m] = CreateSemaphore(NULL, 0, 1, NULL);
+		if (checkout[m] == NULL)
+		{ 
+			printf("Error creating semaphore\n");
+			ret = ERROR_CODE;
+			goto err_checkout_sem; 
+		}
+	}
 
 	/*--------------------------Global Mutexs----------------------------*/
 
+	barrier_mutex = CreateMutex(NULL,FALSE,NULL);
+	if (barrier_mutex == NULL)
+	{ printf("Error creating mutex\n"); ret = ERROR_CODE; goto err_checkout_sem; }
+
+	file_mutex = CreateMutex(NULL, FALSE, NULL);
+	if (file_mutex == NULL)
+	{ printf("Error creating mutex\n"); ret = ERROR_CODE; goto err_file_mutex; }
+
+	a_mutex = CreateMutex(NULL, FALSE, NULL);
+	if (a_mutex == NULL)
+	{ printf("Error creating mutex\n"); ret = ERROR_CODE; goto err_a_mutex; }
+
+	count_mutex = CreateMutex(NULL, FALSE, NULL);
+	if (count_mutex == NULL)
+	{ printf("Error creating mutex\n"); ret = ERROR_CODE; goto err_count_mutex; }
+
+	if (ret == 0)
+		goto ret_goto;
+
+
+err_count_mutex:
+	CloseHandle(a_mutex);
+err_a_mutex:
+	CloseHandle(file_mutex);
+err_file_mutex:
+	CloseHandle(barrier_mutex);
+err_checkout_sem:
+	CloseHandle(barrier_semaphore);
+	for (j = 0; j < m; j++)
+		CloseHandle(checkout[j]);
+err_bar_sem:
+	CloseHandle(god_signal);
+err_room_sem:
+	for (j = 0; j < i; j++)
+		CloseHandle(our_hotel->rooms_sem[j]);
 ret_goto:
 	return ret;
 }

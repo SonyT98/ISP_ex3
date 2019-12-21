@@ -2,6 +2,7 @@
 #include "ThreadFunctions.h"
 #include "HardCodedData.h"
 #include "Costumer.h"
+#include "GlobalVariables.h"
 
 
 
@@ -58,10 +59,11 @@ DWORD God_thread(LPSTR lpParam)
 				{
 					num_people_entring_today++;
 				}
-				ret_val = ReleaseMutex(checkout[i]);
+				out_days[i] = 0;
+				ret_val = ReleaseSemaphore(checkout[i],1,NULL);
 				if (FALSE == ret_val)
 				{
-					printf("Error when releasing %d checkout mutex\n", i);
+					printf("Error when releasing %d checkout semaphore\n", i);
 					return ERROR_CODE;
 				}
 				num_left++;

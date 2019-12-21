@@ -3,6 +3,7 @@
 #include "ThreadFunctions.h"
 #include "HardCodedData.h"
 #include "Costumer.h"
+#include "GlobalVariables.h"
 
 DWORD Costumer_thread(LPSTR lpParam)
 {
@@ -279,7 +280,7 @@ int checkEndOfDay(costumer* costumer,hotel* hotel)
 	//if all the costumers that entered the room fill out the days array, call god to move the day
 	if (count == num_people_entring_today)
 	{
-		ret_val = ReleaseMutex(god_signal);
+		ret_val = ReleaseSemaphore(god_signal,1,NULL);
 		if (FALSE == ret_val)
 		{
 			printf("Error when signaling god_signal\n");

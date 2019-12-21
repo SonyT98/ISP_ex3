@@ -13,26 +13,6 @@
 #include <tchar.h>
 #include <stdlib.h>
 
-static int day;
-static int count;
-static int num_people_entring_today;
-static int *rooms_waiting_list = NULL; //(N rooms)
-static int *out_days = NULL; //(N costumers)
-static HANDLE *checkout			= NULL; //(N costumers)
-static HANDLE god_signal			= NULL;
-static HANDLE first_day_barrier	= NULL;
-
-
-// rendezvous barrier 
-static HANDLE barrier_mutex		= NULL;
-static HANDLE barrier_semaphore = NULL;
-static int barrier_count		= 0;
-
-// Mutex for critical reign  
-static HANDLE file_mutex		= NULL;
-static HANDLE a_mutex			= NULL;
-static HANDLE count_mutex		= NULL;
-
 /*
 *	Costumer is the thread of each costumer that want to enter the 
 *	the hotel. the thread try to enter the appropriate room and wait if cant enter in the first day.
