@@ -33,7 +33,8 @@ int main()
 	err = GetHotel(&my_hotel);
 	err = GetCostumers(&costumers,&n);
 	err = SemaphoreIntialize(my_hotel, n);
-	err = CreateCostumersAndGodArg(my_hotel, costumers, n, &c_arg, &g_arg);
 	err = FindMyRoom(my_hotel, costumers, n);
+	err = CreateCostumersAndGodArg(my_hotel, costumers, n, &c_arg, &g_arg);
+	err = CreateThreads(c_arg, g_arg);
 	return 0;
 }

@@ -35,7 +35,7 @@ DWORD Costumer_thread(LPSTR lpParam)
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
 	/* barrier before first day starts */
-	ret_val = preFirstDayBarrier(num_costumers);
+	ret_val = preFirstDayBarrier(num_costumers+1);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 	
 	/* ---ALL THREADS STARTS TOGETHER HERE--- */
@@ -190,7 +190,7 @@ int writeToFile(costumer* costumer,hotel* hotel, int in_out)
 
 
 	//opening roomLog.txt file
-	error_flag = fopen_s(&fp, "roomLog.txt", "w");
+	error_flag = fopen_s(&fp, "roomLog.txt", "a");
 	if (fp == NULL)// check fopen failure 
 	{
 		printf("Error opening File - roomLog.txt\n");
@@ -220,10 +220,10 @@ int writeToFile(costumer* costumer,hotel* hotel, int in_out)
 	fclose(fp);
 
 err1: /* exit critical section */
-	ret_val = ReleaseMutex(a_mutex);
+	ret_val = ReleaseMutex(file_mutex);
 	if (FALSE == ret_val)
 	{
-		printf("Error when releasing a_mutex\n");
+		printf("Error when releasing file_mutex\n");
 		ret  = ERROR_CODE;
 	}
 err0:
@@ -316,8 +316,8 @@ int accommodateRoom(costumer* costumer,hotel* hotel)
 int freeRoom(costumer* costumer,hotel* hotel)
 {
 	BOOL ret_val;
-	int room_index = costumer->index;
-	ret_val = ReleaseMutex(hotel->rooms_sem[room_index]);
+	int room_index = costumer->my_room;
+	ret_val = ReleaseSemaphore(hotel->rooms_sem[room_index],1,NULL);
 	if (FALSE == ret_val)
 	{
 		printf("Error when releasing  %d room semaphore\n", room_index);

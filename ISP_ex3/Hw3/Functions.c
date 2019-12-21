@@ -135,8 +135,6 @@ int SemaphoreIntialize(hotel *our_hotel, int num_of_costumers)
 	int i = 0, ret = 0, j = 0, m = 0;
 	int num_of_rooms = our_hotel->number_of_rooms;
 
-	day = 6;
-
 	//first we will intialize the rooms semaphore to their size
 	for (i = 0; i < num_of_rooms; i++)
 	{
@@ -156,7 +154,7 @@ int SemaphoreIntialize(hotel *our_hotel, int num_of_costumers)
 	if (god_signal == NULL)
 	{ printf("Error creating semaphore\n"); ret = ERROR_CODE; goto err_room_sem;}
 	
-	barrier_semaphore = CreateSemaphore(NULL, 0, num_of_costumers, NULL);
+	barrier_semaphore = CreateSemaphore(NULL, 0, num_of_costumers+1, NULL);
 	if (barrier_semaphore == NULL)
 	{ printf("Error creating semaphore\n"); ret = ERROR_CODE; goto err_bar_sem; }
 

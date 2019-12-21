@@ -49,4 +49,14 @@ int CloseThreads(HANDLE* p_thread_handles,
 	int last_thread);
 
 
+/*
+* CreateThreads creates the threads of the costumers and god. 
+* Input Arguments:
+*	c_arg - costumer argument.
+*	g_arg - god argument.
+* Output:
+*	return -1 if there is an error.
+*/
+int CreateThreads(struct Costumer_arg **c_arg,struct God_arg *g_arg);
+
 #endif // __THREADFUNCTIONS_H___

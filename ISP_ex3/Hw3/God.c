@@ -9,10 +9,10 @@
 DWORD God_thread(LPSTR lpParam)
 {
 	God_arg *parameters = NULL;
-	costumer* costumers;
+	costumer **costumers;
 	DWORD wait_code;
 	BOOL ret_val;
-	int num_costumers, num_left = 0, next_day, cur_room;
+	int num_costumers, num_left = 0, next_day, cur_room, ret = 0;
 
 	/* Check if lpParam is NULL */
 	if (NULL == lpParam)
@@ -24,12 +24,15 @@ DWORD God_thread(LPSTR lpParam)
 	parameters = (God_arg *)lpParam;
 	/* Convert the structure variable into local variables */
 	num_costumers = parameters->N_costumers;
-	costumers = *(parameters->costumers);
+	costumers = parameters->costumers;
+
+	ret = preFirstDayBarrier(num_costumers + 1);
 
 	while (num_left < num_costumers)
 	{
 		/* wait until the day ends */
-		wait_code = WaitForSingleObject(god_signal, INFINITE);
+		if (num_people_entring_today > 0)
+			wait_code = WaitForSingleObject(god_signal, INFINITE);
 		if (WAIT_OBJECT_0 != wait_code)
 		{
 			printf("Error when waiting for god_signal\n");
@@ -51,7 +54,7 @@ DWORD God_thread(LPSTR lpParam)
 		count = 0;
 		for (int i = 0; i < num_costumers; i++)
 		{
-			cur_room = costumers[i].my_room;
+			cur_room = costumers[i]->my_room;
 
 			if (out_days[i] == day)
 			{
