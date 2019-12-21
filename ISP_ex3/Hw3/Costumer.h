@@ -78,7 +78,7 @@ int preFirstDayBarrier(int num_costumers);
 * Return :
 *	return -1 if error accord
 */
-int tryToEnterTheRoom(struct costumer* costumer, struct  hotel* hotel);
+int tryToEnterTheRoom(costumer* costumer,hotel* hotel);
 
 
 
@@ -93,7 +93,7 @@ int tryToEnterTheRoom(struct costumer* costumer, struct  hotel* hotel);
 * Return :
 *	return -1 if error accord
 */
-int writeToFile(struct costumer* costumer,struct  hotel* hotel, int in_out);
+int writeToFile(costumer* costumer,hotel* hotel, int in_out);
 
 
 /*
@@ -106,7 +106,7 @@ int writeToFile(struct costumer* costumer,struct  hotel* hotel, int in_out);
 * Return :
 *	return -1 if error accord
 */
-int fillOutDay(struct costumer* costumer, struct  hotel* hotel);
+int fillOutDay(costumer* costumer,hotel* hotel);
 
 /*
 * This function add 1 to the count and check if the numer of people that entered today
@@ -118,7 +118,7 @@ int fillOutDay(struct costumer* costumer, struct  hotel* hotel);
 * Return :
 *	return -1 if error accord
 */
-int checkEndOfDay(struct costumer* costumer,struct  hotel* hotel);
+int checkEndOfDay(costumer* costumer,hotel* hotel);
 
 
 /*
@@ -130,7 +130,7 @@ int checkEndOfDay(struct costumer* costumer,struct  hotel* hotel);
 * Return :
 *	return -1 if error accord
 */
-int accommodateRoom(struct costumer* costumer,struct  hotel* hotel);
+int accommodateRoom(costumer* costumer,hotel* hotel);
 
 /*
 * This function releases the room semaphore by 1
@@ -141,6 +141,6 @@ int accommodateRoom(struct costumer* costumer,struct  hotel* hotel);
 * Return :
 *	return -1 if error accord
 */
-int freeRoom(struct costumer* costumer, struct  hotel* hotel);
+int freeRoom(costumer* costumer, hotel* hotel);
 
 #endif // __THREADFUNCTIONS_H___

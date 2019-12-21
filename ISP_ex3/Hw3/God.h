@@ -13,7 +13,6 @@
 #include <tchar.h>
 #include <stdlib.h>
 
-#include "Hard"
 // Function Declarations -------------------------------------------------------
 
 /*

@@ -7,8 +7,8 @@
 DWORD Costumer_thread(LPSTR lpParam)
 {
 	Costumer_arg *parameters = NULL;
-	costumer* costumer;
-	hotel* hotel;
+	costumer* my_costumer;
+	hotel* my_hotel;
 
 	int num_costumers;
 	HANDLE my_room_sem = NULL;
@@ -26,11 +26,11 @@ DWORD Costumer_thread(LPSTR lpParam)
 	parameters = (Costumer_arg *)lpParam;
 	
 	/* Convert the structure variable into local variables */
-	costumer = parameters->costumer;
-	hotel	 = parameters->hotel;
+	my_costumer = parameters->costumer;
+	my_hotel	 = parameters->hotel;
 	num_costumers = parameters->N_costumers;
 
-	ret_val =  firstDayFill(costumer,hotel);
+	ret_val = firstDayPreperation(my_costumer,my_hotel);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
 	/* barrier before first day starts */
@@ -40,34 +40,34 @@ DWORD Costumer_thread(LPSTR lpParam)
 	/* ---ALL THREADS STARTS TOGETHER HERE--- */
 
 	/* try to enter the room if room is full wait until someone gets out */
-	ret_val = tryToEnterTheRoom(costumer,hotel);
+	ret_val = tryToEnterTheRoom(my_costumer,my_hotel);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
 	/* -- Entered the room --*/
-	ret_val = writeToFile(costumer, hotel, IN);
+	ret_val = writeToFile(my_costumer, my_hotel, ENTER);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
-	ret_val = fillOutDay(costumer, hotel);
-	if (ret_val == ERROR_CODE) return ERROR_CODE;
-
-
-	ret_val = checkEndOfDay(costumer, hotel);
-	if (ret_val == ERROR_CODE) return ERROR_CODE;
-
-	ret_val = accommodateRoom(costumer, hotel);
-	if (ret_val == ERROR_CODE) return ERROR_CODE;
-
-	ret_val = writeToFile(costumer, hotel, OUT);
+	ret_val = fillOutDay(my_costumer, my_hotel);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
 
-	ret_val = freeRoom(costumer, hotel);
+	ret_val = checkEndOfDay(my_costumer, my_hotel);
+	if (ret_val == ERROR_CODE) return ERROR_CODE;
+
+	ret_val = accommodateRoom(my_costumer, my_hotel);
+	if (ret_val == ERROR_CODE) return ERROR_CODE;
+
+	ret_val = writeToFile(my_costumer, my_hotel, EXIT);
+	if (ret_val == ERROR_CODE) return ERROR_CODE;
+
+
+	ret_val = freeRoom(my_costumer, my_hotel);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
 	return 0;
 }
 
-int firstDayPreperation(costumer* costumer, hotel* hotel)
+int firstDayPreperation(costumer* costumer,hotel* hotel)
 {
 
 	DWORD wait_code;
@@ -144,7 +144,7 @@ int preFirstDayBarrier(int num_costumers)
 	return 0;
 }
 
-int tryToEnterTheRoom(costumer* costumer, hotel* hotel)
+int tryToEnterTheRoom(costumer* costumer,hotel* hotel)
 {
 	DWORD wait_code;
 	BOOL ret_val;
@@ -160,7 +160,7 @@ int tryToEnterTheRoom(costumer* costumer, hotel* hotel)
 	return 0;
 }
 
-int writeToFile(costumer* costumer, hotel* hotel, int in_out)
+int writeToFile(costumer* costumer,hotel* hotel, int in_out)
 {
 
 	DWORD wait_code;
@@ -187,26 +187,26 @@ int writeToFile(costumer* costumer, hotel* hotel, int in_out)
 
 
 	//opening roomLog.txt file
-	error_flag = fopen_s(&rooms_file, "roomLog.txt", "w");
-	if (rooms_file == NULL)// check fopen failure 
+	error_flag = fopen_s(&fp, "roomLog.txt", "w");
+	if (fp == NULL)// check fopen failure 
 	{
 		printf("Error opening File - roomLog.txt\n");
 		ret = ERROR_CODE;
 		goto err1;
 	}
-	if (in_out == IN)
+	if (in_out == ENTER)
 	{
-		error_flag  = fprintf_s("%s %s IN %d\n", room_name, costumer_name, day);
+		error_flag  = fprintf_s(fp,"%s %s IN %d\n", room_name, costumer_name, day);
 		if (error_flag < 0)
 		{
 			printf("Error when writing to roomLog.txt\n");
 			ret = ERROR_CODE;
 		}
-	
 	}
-	if (in_out == OUT)
+
+	if (in_out == EXIT)
 	{
-		error_flag = fprintf_s("%s %s OUT %d\n", room_name, costumer_name, day);
+		error_flag = fprintf_s(fp,"%s %s OUT %d\n", room_name, costumer_name, day);
 		if (error_flag < 0)
 		{
 			printf("Error when writing to roomLog.txt\n");
@@ -227,7 +227,7 @@ err0:
 	return ret;
 }
 
-int fillOutDay(costumer* costumer, hotel* hotel)
+int fillOutDay(costumer* costumer,hotel* hotel)
 {
 	DWORD wait_code;
 	BOOL ret_val;
@@ -247,7 +247,7 @@ int fillOutDay(costumer* costumer, hotel* hotel)
 	return 0;
 }
 
-int checkEndOfDay(costumer* costumer, hotel* hotel)
+int checkEndOfDay(costumer* costumer,hotel* hotel)
 {
 	DWORD wait_code;
 	BOOL ret_val;
@@ -280,7 +280,7 @@ int checkEndOfDay(costumer* costumer, hotel* hotel)
 	return 0;
 }
 
-int accommodateRoom(costumer* costumer, hotel* hotel)
+int accommodateRoom(costumer* costumer,hotel* hotel)
 {
 	DWORD wait_code;
 	BOOL ret_val;
@@ -295,7 +295,7 @@ int accommodateRoom(costumer* costumer, hotel* hotel)
 	}
 }
 
-int freeRoom(costumer* costumer, hotel* hotel)
+int freeRoom(costumer* costumer,hotel* hotel)
 {
 	BOOL ret_val;
 	int room_index = costumer->index;

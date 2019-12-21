@@ -8,8 +8,8 @@
 #define MAX_ROOM_NAME 20
 #define MAX_NUM_COSTUMERS 15
 
-#define IN 5
-#define OUT 7
+#define ENTER 5
+#define EXIT 7
 
 
 typedef struct
