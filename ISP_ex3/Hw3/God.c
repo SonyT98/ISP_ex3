@@ -44,24 +44,27 @@ DWORD God_thread(LPSTR lpParam)
 		}
 		/*** critical section ***/
 
-		next_day = findNextDay();
+		next_day = findNextDay(num_costumers);
 		day = next_day;
 		num_people_entring_today = 0;
-		for (int i = 0; i < num_costumers, i++)
+		count = 0;
+		for (int i = 0; i < num_costumers; i++)
 		{
 			cur_room = costumers[i].my_room;
 
-			if ((out_days[i] == day) && (rooms_waiting_list[cur_room]) > 0)
+			if (out_days[i] == day)
 			{
-				num_people_entring_today++;
+				if (rooms_waiting_list[cur_room] > 0)
+				{
+					num_people_entring_today++;
+				}
 				ret_val = ReleaseMutex(checkout[i]);
 				if (FALSE == ret_val)
 				{
-					printf("Error when releasing %d checkout mutex\n",i);
+					printf("Error when releasing %d checkout mutex\n", i);
 					return ERROR_CODE;
 				}
 				num_left++;
-			
 			}
 		
 		}

@@ -154,6 +154,7 @@ int SemaphoreIntialize(hotel *our_hotel, int num_of_costumers)
 	god_signal = CreateSemaphore(NULL,0,1, NULL);
 	first_day_barrier = CreateSemaphore(NULL, 0, 1, NULL);
 
+	/*--------------------------Global Mutexs----------------------------*/
 
 ret_goto:
 	return ret;

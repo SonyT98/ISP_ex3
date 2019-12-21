@@ -34,7 +34,8 @@
 *   This function is just a wrapper for CreateThread.
 */
 HANDLE CreateThreadSimple(LPTHREAD_START_ROUTINE p_start_routine,
-	LPDWORD p_thread_id, void *arg_pointer);
+	LPDWORD p_thread_id,
+	void *arg_pointer);
 
 /*
 * Close Thread handles from thread array in places 0 - last_thread.
@@ -44,7 +45,8 @@ HANDLE CreateThreadSimple(LPTHREAD_START_ROUTINE p_start_routine,
 * Return :
 *	return -1 if the thread wont close.
 */
-int CloseThreads(HANDLE* p_thread_handles, int last_thread);
+int CloseThreads(HANDLE* p_thread_handles, 
+	int last_thread);
 
 
 #endif // __THREADFUNCTIONS_H___

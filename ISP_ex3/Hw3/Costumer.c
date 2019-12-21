@@ -47,10 +47,6 @@ DWORD Costumer_thread(LPSTR lpParam)
 	ret_val = writeToFile(my_costumer, my_hotel, ENTER);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
-	ret_val = fillOutDay(my_costumer, my_hotel);
-	if (ret_val == ERROR_CODE) return ERROR_CODE;
-
-
 	ret_val = checkEndOfDay(my_costumer, my_hotel);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
@@ -106,6 +102,7 @@ int preFirstDayBarrier(int num_costumers)
 {
 	DWORD wait_code;
 	BOOL ret_val;
+	int ret = 0;
 	
 	// down(mutex)
 	wait_code = WaitForSingleObject(barrier_mutex, INFINITE);
@@ -123,7 +120,7 @@ int preFirstDayBarrier(int num_costumers)
 		if (FALSE == ret_val)
 		{
 			printf("Error when releasing barrier_semaphore\n");
-			return ERROR_CODE;
+			ret = ERROR_CODE;
 		}
 
 	}
@@ -134,6 +131,11 @@ int preFirstDayBarrier(int num_costumers)
 		printf("Error when releasing barrier_mutex\n");
 		return ERROR_CODE;
 	}
+
+	// if the up barrier_sem failed, return ERROR_CODE
+	if (ret == ERROR_CODE)
+		return ERROR_CODE;
+
 	// down(barrier)
 	wait_code = WaitForSingleObject(barrier_semaphore, INFINITE);
 	if (WAIT_OBJECT_0 != wait_code)
@@ -251,6 +253,7 @@ int checkEndOfDay(costumer* costumer,hotel* hotel)
 {
 	DWORD wait_code;
 	BOOL ret_val;
+	int ret = 0;
 
 	wait_code = WaitForSingleObject(count_mutex, INFINITE);
 	if (WAIT_OBJECT_0 != wait_code)
@@ -261,23 +264,37 @@ int checkEndOfDay(costumer* costumer,hotel* hotel)
 	/*** critical Regan ***/
 
 	count++;
+
+	//fill the out days array
+	ret_val = fillOutDay(costumer,hotel);
+	if (ret_val == ERROR_CODE)
+	{
+		ret = ERROR_CODE;
+		goto release_mutex;
+	}
+
+	//the costumer entered the room, therefore not in waitingl list
 	rooms_waiting_list[costumer->my_room]--;
+
+	//if all the costumers that entered the room fill out the days array, call god to move the day
 	if (count == num_people_entring_today)
 	{
 		ret_val = ReleaseMutex(god_signal);
 		if (FALSE == ret_val)
 		{
 			printf("Error when signaling god_signal\n");
-			return ERROR_CODE;
+			ret = ERROR_CODE;
+			goto release_mutex;
 		}
 	}
+release_mutex:
 	ret_val = ReleaseMutex(count_mutex);
 	if (FALSE == ret_val)
 	{
 		printf("Error when releasing count_mutex\n");
 		return ERROR_CODE;
 	}
-	return 0;
+	return ret;
 }
 
 int accommodateRoom(costumer* costumer,hotel* hotel)

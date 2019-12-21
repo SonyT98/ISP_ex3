@@ -13,6 +13,8 @@
 #include "Functions.h"
 #include "HardCodedData.h"
 #include "ThreadFunctions.h"
+#include "Costumer.h"
+#include "God.h"
 
 /*oOoOoOoOoOoOoOoOoOoO Global Variables oOoOoOoOoOoOoOoOoOoOoOoOoOoOoOoO*/
 

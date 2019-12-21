@@ -13,14 +13,14 @@
 #include <tchar.h>
 #include <stdlib.h>
 
-int day;
-int count;
-int num_people_entring_today;
-int *rooms_waiting_list = NULL; //(N rooms)
-int *out_days = NULL; //(N costumers)
-HANDLE *checkout			= NULL; //(N costumers)
-HANDLE god_signal			= NULL;
-HANDLE first_day_barrier	= NULL;
+static int day;
+static int count;
+static int num_people_entring_today;
+static int *rooms_waiting_list = NULL; //(N rooms)
+static int *out_days = NULL; //(N costumers)
+static HANDLE *checkout			= NULL; //(N costumers)
+static HANDLE god_signal			= NULL;
+static HANDLE first_day_barrier	= NULL;
 
 
 // rendezvous barrier 

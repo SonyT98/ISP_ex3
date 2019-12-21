@@ -32,8 +32,6 @@ DWORD God_thread(LPSTR lpParam);
 *	return the next day 
 */
 
-int findNextDay(int num_costumers)
-
-
+int findNextDay(int num_costumers);
 
 #endif
