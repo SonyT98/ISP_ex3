@@ -34,4 +34,13 @@ DWORD God_thread(LPSTR lpParam);
 
 int findNextDay(int num_costumers);
 
+/*
+* CopyintArray copy array src into array dest. a and b are allocated and new to be the
+* same size.
+* Input Arguments:
+*	src - the source array.
+*	dest - the destination array.
+*	n - the array's size.
+*/
+void CopyintArray(int *src, int *dest, int n);
 #endif

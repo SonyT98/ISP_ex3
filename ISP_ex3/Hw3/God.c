@@ -13,6 +13,7 @@ DWORD God_thread(LPSTR lpParam)
 	DWORD wait_code;
 	BOOL ret_val;
 	int num_costumers, num_left = 0, next_day, cur_room, ret = 0;
+	int waiting_list_god[MAX_NUM_ROOMS] = { 0 };
 
 	/* Check if lpParam is NULL */
 	if (NULL == lpParam)
@@ -48,6 +49,10 @@ DWORD God_thread(LPSTR lpParam)
 		/*** critical section ***/
 
 		next_day = findNextDay(num_costumers);
+
+		//copying the current waiting list, in each day (without changing the global one)
+		CopyintArray(rooms_waiting_list, waiting_list_god, MAX_NUM_ROOMS);
+
 		day = next_day;
 		num_people_entring_today = 0;
 		count = 0;
@@ -58,9 +63,10 @@ DWORD God_thread(LPSTR lpParam)
 			if (out_days[i] == day)
 			{
 				num_people_entring_today++;
-				if (rooms_waiting_list[cur_room] > 0)
+				if (waiting_list_god[cur_room] > 0)
 				{
 					num_people_entring_today++;
+					waiting_list_god[cur_room]--;
 				}
 				out_days[i] = 0;
 				ret_val = ReleaseSemaphore(checkout[i],1,NULL);
@@ -100,4 +106,12 @@ int findNextDay(int num_costumers)
 		}
 	}
 	return min;
+}
+
+void CopyintArray(int *src, int *dest, int n)
+{
+	int i = 0;
+
+	for (i = 0; i < n; i++)
+		dest[i]= src[i];
 }

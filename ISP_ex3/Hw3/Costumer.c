@@ -48,11 +48,11 @@ DWORD Costumer_thread(LPSTR lpParam)
 	ret_val = writeToFile(my_costumer, my_hotel, ENTER);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
-	ret_val = checkEndOfDay(my_costumer, my_hotel);
-	if (ret_val == ERROR_CODE) return ERROR_CODE;
-
 	//fill the out days array
 	ret_val = fillOutDay(my_costumer, my_hotel);
+	if (ret_val == ERROR_CODE) return ERROR_CODE;
+
+	ret_val = checkEndOfDay(my_costumer, my_hotel);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
 	ret_val = accommodateRoom(my_costumer, my_hotel);
@@ -263,6 +263,9 @@ int fillOutDay(costumer* costumer,hotel* hotel)
 	/* fill the out_days array*/
 	out_days[costumer->index] = out_day;
 
+	//the costumer entered the room, therefore not in waitingl list
+	rooms_waiting_list[costumer->my_room]--;
+
 	/* exit critical section */
 	ret_val = ReleaseMutex(count_mutex);
 	if (FALSE == ret_val)
@@ -289,9 +292,6 @@ int checkEndOfDay(costumer* costumer,hotel* hotel)
 
 	count++;
 
-
-	//the costumer entered the room, therefore not in waitingl list
-	rooms_waiting_list[costumer->my_room]--;
 
 	//if all the costumers that entered the room fill out the days array, call god to move the day
 	if (count == num_people_entring_today)

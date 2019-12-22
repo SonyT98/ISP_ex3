@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 	char *c = NULL;
 
 
-	int n = 0, err = 0, wait_res = 0;
+	int n = 0, err = 0, wait_res = 0, j = 0;
 	err = chdir(argv[1]);
 	err = GetHotel(&my_hotel);
 	err = GetCostumers(&costumers, &n);
@@ -38,6 +38,20 @@ int main(int argc, char** argv)
 	err = FindMyRoom(my_hotel, costumers, n);
 	err = CreateCostumersAndGodArg(my_hotel, costumers, n, &c_arg, &g_arg);
 	err = CreateThreads(c_arg, g_arg);
+
+	free(my_hotel);
+	FreeArrayOfPointers(costumers, n);
+	free(costumers);
+	for (j = 0; j < my_hotel->number_of_rooms; j++)
+		CloseHandle(my_hotel->rooms_sem[j]);
+	CloseHandle(god_signal);
+	CloseHandle(barrier_semaphore);
+	for (j = 0; j < n; j++)
+		CloseHandle(checkout[j]);
+	CloseHandle(barrier_mutex);
+	CloseHandle(file_mutex);
+	CloseHandle(a_mutex);
+	CloseHandle(count_mutex);
 
 	return err;
 }
