@@ -3,9 +3,9 @@
 #define __HARDCODEDDATA_H___
 
 #define ERROR_CODE ((int)(-1))
-#define MAX_LINE_LENGTH 50
+#define MAX_LINE_LENGTH 100
 #define MAX_NUM_ROOMS 5
-#define MAX_ROOM_NAME 20
+#define MAX_ROOM_NAME 21
 #define MAX_NUM_COSTUMERS 15
 
 #define ENTER 5

@@ -40,9 +40,11 @@ int GetHotel(hotel **our_hotel)
 	//reading the rooms file and update the hotel structure
 	while (fgets(file_line, MAX_LINE_LENGTH, rooms_file) != NULL)
 	{
-		sscanf_s(file_line, "%s %d %d", ((*our_hotel)->room_names)[room_index], MAX_LINE_LENGTH, 
-			&((*our_hotel)->price_per_person[room_index]), &((*our_hotel)->rooms_size[room_index]));
+		sscanf_s(file_line, "%s %d %d", (*our_hotel)->room_names[room_index],
+			MAX_ROOM_NAME-1, &price, &size);
 
+		(*our_hotel)->price_per_person[room_index] = price;
+		(*our_hotel)->rooms_size[room_index] = size;
 
 		room_index++;
 	}
@@ -99,7 +101,7 @@ int GetCostumers(costumer ***our_costumers, int *n_costumers)
 			ret = ERROR_CODE;
 			goto err_malloc_costumer;
 		}
-		sscanf_s(file_line, "%s %d", (*our_costumers)[costumers_index]->name, MAX_LINE_LENGTH,
+		sscanf_s(file_line, "%s %d", (*our_costumers)[costumers_index]->name, MAX_LINE_LENGTH-1,
 			&((*our_costumers)[costumers_index]->money));
 
 		(*our_costumers)[costumers_index]->my_room = 0;
