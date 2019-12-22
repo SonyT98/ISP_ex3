@@ -31,8 +31,7 @@ DWORD God_thread(LPSTR lpParam)
 	while (num_left < num_costumers)
 	{
 		/* wait until the day ends */
-		if (num_people_entring_today > 0)
-			wait_code = WaitForSingleObject(god_signal, INFINITE);
+		wait_code = WaitForSingleObject(god_signal, INFINITE);
 		if (WAIT_OBJECT_0 != wait_code)
 		{
 			printf("Error when waiting for god_signal\n");
@@ -58,6 +57,7 @@ DWORD God_thread(LPSTR lpParam)
 
 			if (out_days[i] == day)
 			{
+				num_people_entring_today++;
 				if (rooms_waiting_list[cur_room] > 0)
 				{
 					num_people_entring_today++;

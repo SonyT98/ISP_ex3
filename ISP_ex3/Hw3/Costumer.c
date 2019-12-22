@@ -51,14 +51,20 @@ DWORD Costumer_thread(LPSTR lpParam)
 	ret_val = checkEndOfDay(my_costumer, my_hotel);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
+	//fill the out days array
+	ret_val = fillOutDay(my_costumer, my_hotel);
+	if (ret_val == ERROR_CODE) return ERROR_CODE;
+
 	ret_val = accommodateRoom(my_costumer, my_hotel);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
 	ret_val = writeToFile(my_costumer, my_hotel, EXIT);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
-
 	ret_val = freeRoom(my_costumer, my_hotel);
+	if (ret_val == ERROR_CODE) return ERROR_CODE;
+
+	ret_val = checkEndOfDay(my_costumer, my_hotel);
 	if (ret_val == ERROR_CODE) return ERROR_CODE;
 
 	return 0;
@@ -242,11 +248,28 @@ int fillOutDay(costumer* costumer,hotel* hotel)
 
 	/* calculate exit day*/
 	total_days = costumer_money / room_price;
+
+	wait_code = WaitForSingleObject(count_mutex, INFINITE);
+	if (WAIT_OBJECT_0 != wait_code)
+	{
+		printf("Error when waiting for count_mutex\n");
+		return ERROR_CODE;
+	}
+	/*** critical section ***/
+
+	// find the exit day
 	out_day = total_days + day;
 
 	/* fill the out_days array*/
 	out_days[costumer->index] = out_day;
 
+	/* exit critical section */
+	ret_val = ReleaseMutex(count_mutex);
+	if (FALSE == ret_val)
+	{
+		printf("Error when releasing count_mutex\n");
+		return ERROR_CODE;
+	}
 	return 0;
 }
 
@@ -266,13 +289,6 @@ int checkEndOfDay(costumer* costumer,hotel* hotel)
 
 	count++;
 
-	//fill the out days array
-	ret_val = fillOutDay(costumer,hotel);
-	if (ret_val == ERROR_CODE)
-	{
-		ret = ERROR_CODE;
-		goto release_mutex;
-	}
 
 	//the costumer entered the room, therefore not in waitingl list
 	rooms_waiting_list[costumer->my_room]--;
