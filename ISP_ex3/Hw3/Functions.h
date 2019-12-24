@@ -39,10 +39,8 @@ int GetCostumers(struct costumer ***our_costumers, int *n_costumers);
 * Input Arguments:
 *	arr   - the array of pointers (costumer) that we want to free.
 *	index - how much allocated memory we want to free.
-* Output: 
-*	return -1 if failed.
 */
-int FreeArrayOfPointers(struct costumer **arr, int index);
+void FreeArrayOfPointers(struct costumer **arr, int index);
 
 
 /*
@@ -82,5 +80,13 @@ int CreateCostumersAndGodArg(struct hotel *our_hotel,struct costumer **our_costu
 *	return -1 if there is an error.
 */
 int FindMyRoom(struct hotel *our_hotel, struct costumer **our_costumers, int n_costumers);
+
+/*
+* FreeMemoryAndHandles free all handles for semaphore and mutex, and all the allocated memory.
+* Input Arguments:
+*	c_arg - the costumer threads argumets.
+*	g_arg - the god thread argument.
+*/
+void FreeMemoryAndHandles(struct Costumer_arg **c_arg,struct God_arg *g_arg);
 
 #endif // __FUNCTIONS_H___

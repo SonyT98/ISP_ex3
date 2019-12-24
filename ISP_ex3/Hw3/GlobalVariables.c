@@ -1,3 +1,7 @@
+// Authors - Tomer Segal 207133646, Nadav Nave 209365725
+// Exercise 3 in the Course Introduction to system programming
+// This file includes all the global variables of the project
+
 #include "GlobalVariables.h"
 
 /*oOoOoOoOoOoOoOoOoOoO Global Variables oOoOoOoOoOoOoOoOoOoOoOoOoOoOoOoO*/

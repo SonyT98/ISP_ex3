@@ -1,3 +1,7 @@
+// Authors - Tomer Segal 207133646, Nadav Nave 209365725
+// Exercise 3 in the Course Introduction to system programming
+// This is the costumer thread function (and his related functions)
+
 // Includes --------------------------------------------------------------------
 
 #include "ThreadFunctions.h"
