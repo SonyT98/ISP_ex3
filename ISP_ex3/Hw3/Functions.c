@@ -332,6 +332,54 @@ int FindMyRoom(hotel *our_hotel, costumer **our_costumers, int n_costumers)
 	return 0;
 }
 
+void FreeHotel(hotel *our_hotel)
+{
+	free(our_hotel);
+}
+
+void FreeCostumers(costumer **our_costumers, int n_costumers)
+{
+	FreeArrayOfPointers(our_costumers, n_costumers);
+	Free(our_costumers);
+}
+
+void FreeMutexAndSemaphoresHandles(hotel* our_hotel, int n_costumers)
+{
+	int j = 0;
+
+	/*------------------------------ Semaphores ---------------------------------------*/
+	//free the room's semaphores
+	for (j = 0; j < our_hotel->number_of_rooms; j++)
+		//close handle of the rooms semaphores (from the shared hotel struct to all costumers)
+		CloseHandle(our_hotel->rooms_sem[j]);
+
+	/*----------------------------- Global Semaphores ---------------------------------*/
+	CloseHandle(god_signal);
+	CloseHandle(barrier_semaphore);
+	for (j = 0; j < n_costumers; j++)
+		CloseHandle(checkout[j]);
+
+	/*----------------------------- Global Mutexs --------------------- ---------------*/
+	CloseHandle(barrier_mutex);
+	CloseHandle(file_mutex);
+	CloseHandle(a_mutex);
+	CloseHandle(count_mutex);
+}
+
+void FreeCostumersAndGodArg(Costumer_arg **c_arg, God_arg *g_arg)
+{
+	int j = 0;
+
+	//free c_arg structure
+	for (j = 0; j < g_arg->N_costumers; j++)
+		free(c_arg[j]);
+
+	//free c_arg array
+	free(c_arg);
+
+	//free g_arg structure
+	free(g_arg);
+}
 
 void FreeMemoryAndHandles(Costumer_arg **c_arg, God_arg *g_arg)
 {

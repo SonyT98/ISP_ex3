@@ -45,6 +45,11 @@ int main(int argc, char** argv)
 	//change the directory folder to the required folder
 	path = argv[1];
 	err = chdir(argv[1]);
+	if (err == ERROR_CODE)
+	{
+		printf("Error: folder path isn't valid!\n");
+		return ERROR_CODE;
+	}
 
 	// run the hotel
 	err = runHotel();
