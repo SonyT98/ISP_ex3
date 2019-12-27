@@ -267,7 +267,7 @@ int fillOutDay(costumer* costumer,hotel* hotel)
 	/* fill the out_days array*/
 	out_days[costumer->index] = out_day;
 
-	//the costumer entered the room, therefore not in waitingl list
+	//the costumer entered the room, therefore not in waiting list
 	rooms_waiting_list[costumer->my_room]--;
 
 	/* exit critical section */

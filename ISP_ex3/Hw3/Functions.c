@@ -15,7 +15,7 @@
 
 int GetHotel(hotel **our_hotel)
 {
-	//varibales
+	//variables
 	FILE *rooms_file = NULL;
 	char file_line[MAX_LINE_LENGTH] = { 0 };
 	int room_index = 0, i = 0;
@@ -64,7 +64,7 @@ int GetHotel(hotel **our_hotel)
 	//updating the number of rooms
 	(*our_hotel)->number_of_rooms = room_index;
 
-	//intialize the hanlde semaphores
+	//initialize the handle semaphores
 	for (i = 0; i < MAX_NUM_ROOMS; i++)
 		(*our_hotel)->rooms_sem[i] = NULL;
 
@@ -82,7 +82,7 @@ err_fopen1:
 
 int GetCostumers(costumer ***our_costumers, int *n_costumers)
 {
-	//varibales
+	//variables
 	FILE *names_file = NULL;
 	char file_line[MAX_LINE_LENGTH] = { 0 };
 	int costumers_index = 0;
@@ -110,7 +110,7 @@ int GetCostumers(costumer ***our_costumers, int *n_costumers)
 	//reading the names file and update the costumers array
 	while (fgets(file_line, MAX_LINE_LENGTH, names_file) != NULL)
 	{
-		// creating the costumer struct
+		// creating the costumer structure
 		(*our_costumers)[costumers_index] = (costumer*)malloc(sizeof(costumer));
 		if ((*our_costumers)[costumers_index] == NULL)
 		{
@@ -165,7 +165,7 @@ int SemaphoreIntialize(hotel *our_hotel, int num_of_costumers)
 	int i = 0, ret = 0, j = 0, m = 0;
 	int num_of_rooms = our_hotel->number_of_rooms;
 
-	//first we will intialize the rooms semaphore to their size (room size)
+	//first we will initialize the rooms semaphore to their size (room size)
 	for (i = 0; i < num_of_rooms; i++)
 	{
 		our_hotel->rooms_sem[i] = CreateSemaphore(NULL, our_hotel->rooms_size[i],
@@ -264,14 +264,14 @@ int CreateCostumersAndGodArg(hotel *our_hotel, costumer **our_costumers, int n_c
 		goto ret_goto;
 	}
 
-	//go over the costumer arg array and fill it accordinly.
+	//go over the costumer arguments array and fill it accordingly.
 	for (i = 0; i < n_costumers; i++)
 	{
 		//allocate memory for each argument in the costumers array
 		(*c_arg)[i] = (Costumer_arg*)malloc(sizeof(Costumer_arg));
 		if ((*c_arg)[i] == NULL)
 		{
-			printf("Error allocating memory for costumer_arg struct\n");
+			printf("Error allocating memory for costumer_arg structure\n");
 			ret = ERROR_CODE;
 			goto err_malloc_c_arg;
 		}
@@ -284,7 +284,7 @@ int CreateCostumersAndGodArg(hotel *our_hotel, costumer **our_costumers, int n_c
 	(*g_arg) = (God_arg*)malloc(sizeof(God_arg));
 	if (*g_arg == NULL)
 	{
-		printf("Error allocating memory for god_arg struct\n");
+		printf("Error allocating memory for god_arg structure\n");
 		ret = ERROR_CODE;
 		goto err_malloc_c_arg;
 	}
@@ -356,23 +356,23 @@ void FreeMemoryAndHandles(Costumer_arg **c_arg, God_arg *g_arg)
 	CloseHandle(count_mutex);
 
 	/*--------------------------- Allocated Memory ------------------------------------*/
-	//free hotel struct
+	//free hotel structure
 	free(c_arg[0]->hotel);
 
-	//free costumers struct
+	//free costumers structure
 	for (j = 0; j < g_arg->N_costumers; j++)
 		free(g_arg->costumers[j]);
 
-	//free costumers struct array
+	//free costumers structure array
 	free(g_arg->costumers);
 
-	//free c_arg struct
+	//free c_arg structure
 	for (j = 0; j < g_arg->N_costumers; j++)
 		free(c_arg[j]);
 
 	//free c_arg array
 	free(c_arg);
 
-	//free g_arg struct
+	//free g_arg structure
 	free(g_arg);
 }

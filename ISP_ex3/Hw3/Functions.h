@@ -14,7 +14,7 @@
 // Function Declarations -------------------------------------------------------
 
 /*
-* GetHotel is reading the rooms file and updae the hotel struct.
+* GetHotel is reading the rooms file and update the hotel struct.
 * Input Argument:
 *	our_hotel - pointer to hotel struct the includes the rooms information.
 * Output:
@@ -23,7 +23,7 @@
 int GetHotel(struct hotel **our_hotel_pointer);
 
 /*
-* GetCostumer is reading the names file and updae the costumers struct.
+* GetCostumer is reading the names file and update the costumers struct.
 * Input Argument:
 *	our_costumers - pointer to array of costumers struct the includes the costumers information.
 *	n_costumers   - number of costumers.
@@ -44,9 +44,9 @@ void FreeArrayOfPointers(struct costumer **arr, int index);
 
 
 /*
-* SemaphoreIntialize intialie all the semaphores and mutex to the wanted values.
+* SemaphoreIntialize initialize all the semaphores and mutex to the wanted values.
 * Input Arguments:
-*	our_hotel			- intialize the semaphores of the rooms.
+*	our_hotel			- initialize the semaphores of the rooms.
 *	number_of_costumers - number of costumers.
 * Output:
 *	return -1 if failed;
@@ -84,7 +84,7 @@ int FindMyRoom(struct hotel *our_hotel, struct costumer **our_costumers, int n_c
 /*
 * FreeMemoryAndHandles free all handles for semaphore and mutex, and all the allocated memory.
 * Input Arguments:
-*	c_arg - the costumer threads argumets.
+*	c_arg - the costumer threads arguments.
 *	g_arg - the god thread argument.
 */
 void FreeMemoryAndHandles(struct Costumer_arg **c_arg,struct God_arg *g_arg);

@@ -89,7 +89,7 @@ int writeToFile(costumer* costumer,hotel* hotel, int in_out);
 int fillOutDay(costumer* costumer,hotel* hotel);
 
 /*
-* This function add 1 to the count and check if the numer of people that entered today
+* This function add 1 to the count and check if the number of people that entered today
 * is equal to the expected number of people to enter. if it does it Signals God thread to change the day.
 *
 * Input Arguments :
@@ -102,7 +102,7 @@ int checkEndOfDay(costumer* costumer,hotel* hotel);
 
 
 /*
-* This function waits until the God thred release it when the day to exit will come.
+* This function waits until the God thread release it when the day to exit will come.
 *
 * Input Arguments :
 *	costumer:		pointer to the costumer structure.
