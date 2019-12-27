@@ -82,6 +82,37 @@ int CreateCostumersAndGodArg(struct hotel *our_hotel,struct costumer **our_costu
 int FindMyRoom(struct hotel *our_hotel, struct costumer **our_costumers, int n_costumers);
 
 /*
+* FreeHotel free the pointer to the hotel struct.
+* InputArguments:
+*	our_hotel - hotel struct that we want to free.
+*/
+void FreeHotel(struct hotel *our_hotel);
+
+/*
+* FreeHotel free the pointer to the costumers struct array and the costumers struct.
+* InputArguments:
+*	our_costumers - costumers array struct that we want to free.
+*	n_costumers   - number of costumers.
+*/
+void FreeCostumers(struct costumer **our_costumers, int n_costumers);
+
+/*
+* FreeMutexAndSemaphoresHandles free all the handles to the semaphores and mutexs
+* Input ArgumentsL
+*	our_hotel - the pointer to the hotel struct that includes the semaphores.
+*	n_costumers   - number of costumers.
+*/
+void FreeMutexAndSemaphoresHandles(struct hotel* our_hotel, int n_costumers);
+
+/*
+* FreeCostumersAndGodArg free the allocated memory for the thread arguments.
+* Input Arguments:
+*	c_arg - the costumer threads arguments.
+*	g_arg - the god thread argument.
+*/
+void FreeCostumersAndGodArg(struct Costumer_arg **c_arg,struct God_arg *g_arg);
+
+/*
 * FreeMemoryAndHandles free all handles for semaphore and mutex, and all the allocated memory.
 * Input Arguments:
 *	c_arg - the costumer threads arguments.
