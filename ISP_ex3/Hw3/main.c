@@ -45,6 +45,11 @@ int main(int argc, char** argv)
 	//change the dir folder to the required folder
 	path = argv[1];
 	err = chdir(argv[1]);
+	if (err == ERROR_CODE)
+	{
+		printf("Error: folder path isn't valid!\n");
+		return ERROR_CODE;
+	}
 
 	//fill up hotel structure according to the rooms.txt file
 	err = GetHotel(&my_hotel);
