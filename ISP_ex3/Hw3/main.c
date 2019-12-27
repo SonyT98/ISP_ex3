@@ -29,6 +29,7 @@ int main(int argc, char** argv)
 	//variables
 	char *path = NULL;
 	int err;
+
 	// check number of input arguments
 	if (argc != 2)
 	{
