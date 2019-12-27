@@ -46,32 +46,36 @@ int main(int argc, char** argv)
 	path = argv[1];
 	err = chdir(argv[1]);
 
-	//fill up hotel structure according to the rooms.txt file
-	err = GetHotel(&my_hotel);
+	// run the hotel
+	err = runHotel();
 	if (err == ERROR_CODE) return ERROR_CODE;
 
-	//fill up costumer structure array according to the names.txt file
-	err = GetCostumers(&costumers, &n);
-	if (err == ERROR_CODE) return ERROR_CODE;
+	////fill up hotel structure according to the rooms.txt file
+	//err = GetHotel(&my_hotel);
+	//if (err == ERROR_CODE) return ERROR_CODE;
 
-	//Initialize the rooms semaphores and the global semaphores/mutes to the required values
-	err = SemaphoreIntialize(my_hotel, n);
-	if (err == ERROR_CODE) return ERROR_CODE;
+	////fill up costumer structure array according to the names.txt file
+	//err = GetCostumers(&costumers, &n);
+	//if (err == ERROR_CODE) return ERROR_CODE;
 
-	//for each costumer find his room
-	err = FindMyRoom(my_hotel, costumers, n);
-	if (err == ERROR_CODE) return ERROR_CODE;
+	////Initialize the rooms semaphores and the global semaphores/mutes to the required values
+	//err = SemaphoreIntialize(my_hotel, n);
+	//if (err == ERROR_CODE) return ERROR_CODE;
 
-	// create the arguments for costumer thread and god thread
-	err = CreateCostumersAndGodArg(my_hotel, costumers, n, &c_arg, &g_arg);
-	if (err == ERROR_CODE) return ERROR_CODE;
+	////for each costumer find his room
+	//err = FindMyRoom(my_hotel, costumers, n);
+	//if (err == ERROR_CODE) return ERROR_CODE;
 
-	//create the thread that write to roomLog
-	err = CreateThreads(c_arg, g_arg);
-	if (err == ERROR_CODE) return ERROR_CODE;
+	//// create the arguments for costumer thread and god thread
+	//err = CreateCostumersAndGodArg(my_hotel, costumers, n, &c_arg, &g_arg);
+	//if (err == ERROR_CODE) return ERROR_CODE;
 
-	//free memory and handles for the semaphore/mutex
-	FreeMemoryAndHandles(c_arg, g_arg);
+	////create the thread that write to roomLog
+	//err = CreateThreads(c_arg, g_arg);
+	//if (err == ERROR_CODE) return ERROR_CODE;
+
+	////free memory and handles for the semaphore/mutex
+	//FreeMemoryAndHandles(c_arg, g_arg);
 
 	return err;
 }
