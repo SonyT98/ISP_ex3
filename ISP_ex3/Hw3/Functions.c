@@ -340,7 +340,7 @@ void FreeHotel(hotel *our_hotel)
 void FreeCostumers(costumer **our_costumers, int n_costumers)
 {
 	FreeArrayOfPointers(our_costumers, n_costumers);
-	Free(our_costumers);
+	free(our_costumers);
 }
 
 void FreeMutexAndSemaphoresHandles(hotel* our_hotel, int n_costumers)
@@ -381,51 +381,6 @@ void FreeCostumersAndGodArg(Costumer_arg **c_arg, God_arg *g_arg)
 	free(g_arg);
 }
 
-void FreeMemoryAndHandles(Costumer_arg **c_arg, God_arg *g_arg)
-{
-	int j = 0;
-
-	/*------------------------------ Semaphores ---------------------------------------*/
-	//free the room's semaphores
-	for (j = 0; j < c_arg[0]->hotel->number_of_rooms; j++)
-		//close handle of the rooms semaphores (from the shared hotel struct to all costumers)
-		CloseHandle(c_arg[0]->hotel->rooms_sem[j]);
-
-	/*----------------------------- Global Semaphores ---------------------------------*/
-	CloseHandle(god_signal);
-	CloseHandle(barrier_semaphore);
-	for (j = 0; j < g_arg->N_costumers; j++)
-		CloseHandle(checkout[j]);
-
-	/*----------------------------- Global Mutexs --------------------- ---------------*/
-	CloseHandle(barrier_mutex);
-	CloseHandle(file_mutex);
-	CloseHandle(a_mutex);
-	CloseHandle(count_mutex);
-
-	/*--------------------------- Allocated Memory ------------------------------------*/
-	//free hotel structure
-	free(c_arg[0]->hotel);
-
-	//free costumers structure
-	for (j = 0; j < g_arg->N_costumers; j++)
-		free(g_arg->costumers[j]);
-
-	//free costumers structure array
-	free(g_arg->costumers);
-
-	//free c_arg structure
-	for (j = 0; j < g_arg->N_costumers; j++)
-		free(c_arg[j]);
-
-	//free c_arg array
-	free(c_arg);
-
-	//free g_arg structure
-	free(g_arg);
-}
-
-
 int runHotel()
 {
 	//variables
@@ -434,7 +389,7 @@ int runHotel()
 	Costumer_arg **c_arg = NULL;
 	God_arg *g_arg = NULL;
 	char *path = NULL;
-	int n = 0, err = 0, wait_res = 0, j = 0, ret =0;
+	int number_of_costumers = 0, err = 0, wait_res = 0, j = 0, ret =0;
 
 
 	//fill up hotel structure according to the rooms.txt file
@@ -442,19 +397,19 @@ int runHotel()
 	if (err == ERROR_CODE) ret = ERROR_CODE; goto err0;
 
 	//fill up costumer structure array according to the names.txt file
-	err = GetCostumers(&costumers, &n);
+	err = GetCostumers(&costumers, &number_of_costumers);
 	if (err == ERROR_CODE) ret = ERROR_CODE; goto freeHotel;
 
 	//Initialize the rooms semaphores and the global semaphores/mutes to the required values
-	err = SemaphoreIntialize(my_hotel, n);
+	err = SemaphoreIntialize(my_hotel, number_of_costumers);
 	if (err == ERROR_CODE) ret = ERROR_CODE; goto freeHotelAndCostumers;
 
 	//for each costumer find his room
-	err = FindMyRoom(my_hotel, costumers, n);
+	err = FindMyRoom(my_hotel, costumers, number_of_costumers);
 	if (err == ERROR_CODE) ret = ERROR_CODE; goto freeHotelCostumersAndHandles;
 
 	// create the arguments for costumer thread and god thread
-	err = CreateCostumersAndGodArg(my_hotel, costumers, n, &c_arg, &g_arg);
+	err = CreateCostumersAndGodArg(my_hotel, costumers, number_of_costumers, &c_arg, &g_arg);
 	if (err == ERROR_CODE) ret = ERROR_CODE; goto freeHotelCostumersAndHandles;
 
 	//create the thread that write to roomLog
@@ -465,16 +420,16 @@ int runHotel()
 
 
 freeAll:
-	FreeCostumersAndGodArg();
+	FreeCostumersAndGodArg(c_arg,g_arg);
 
 freeHotelCostumersAndHandles :
-	FreeMutexAndSemaphoresHandles();
+	FreeMutexAndSemaphoresHandles(my_hotel,number_of_costumers);
 
 freeHotelAndCostumers:
-	FreeCostumers();
+	FreeCostumers(costumers,number_of_costumers);
 
 freeHotel:
-	FreeHotel();
+	FreeHotel(my_hotel);
 
 err0:
 	return ret;

@@ -112,12 +112,13 @@ void FreeMutexAndSemaphoresHandles(struct hotel* our_hotel, int n_costumers);
 */
 void FreeCostumersAndGodArg(struct Costumer_arg **c_arg,struct God_arg *g_arg);
 
+
 /*
-* FreeMemoryAndHandles free all handles for semaphore and mutex, and all the allocated memory.
-* Input Arguments:
-*	c_arg - the costumer threads arguments.
-*	g_arg - the god thread argument.
+* runHotel is the main function that operates the hotel program.
+* the function initialize all memory and structure needed for the hotel,
+* runs the costumers threads and free all needed memory and handles.
 */
-void FreeMemoryAndHandles(struct Costumer_arg **c_arg,struct God_arg *g_arg);
+
+int runHotel();
 
 #endif // __FUNCTIONS_H___
