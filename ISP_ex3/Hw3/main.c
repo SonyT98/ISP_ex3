@@ -3,7 +3,7 @@
 // This is the main function of the moed bet inn
 
 
-/*oOoOoOoOoOoOoOoOoOoO Libary Includes oOoOoOoOoOoOoOoOoOoOoOoOoOoOoOoO*/
+/*oOoOoOoOoOoOoOoOoOoO Library Includes oOoOoOoOoOoOoOoOoOoOoOoOoOoOoOoO*/
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 		return ERROR_CODE;
 	}
 
-	//change the dir folder to the required folder
+	//change the directory folder to the required folder
 	path = argv[1];
 	err = chdir(argv[1]);
 
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 	err = GetCostumers(&costumers, &n);
 	if (err == ERROR_CODE) return ERROR_CODE;
 
-	//Intialize the rooms semaphores and the global semaphores/mutes to the required values
+	//Initialize the rooms semaphores and the global semaphores/mutes to the required values
 	err = SemaphoreIntialize(my_hotel, n);
 	if (err == ERROR_CODE) return ERROR_CODE;
 
