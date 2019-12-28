@@ -389,32 +389,32 @@ int runHotel()
 	Costumer_arg **c_arg = NULL;
 	God_arg *g_arg = NULL;
 	char *path = NULL;
-	int number_of_costumers = 0, err = 0, wait_res = 0, j = 0, ret =0;
+	int number_of_costumers = 0, err = 0, wait_res = 0, j = 0, ret = 0;
 
 
 	//fill up hotel structure according to the rooms.txt file
 	err = GetHotel(&my_hotel);
-	if (err == ERROR_CODE) ret = ERROR_CODE; goto err0;
+	if (err == ERROR_CODE) { ret = ERROR_CODE; goto err0; }
 
 	//fill up costumer structure array according to the names.txt file
 	err = GetCostumers(&costumers, &number_of_costumers);
-	if (err == ERROR_CODE) ret = ERROR_CODE; goto freeHotel;
+	if (err == ERROR_CODE) { ret = ERROR_CODE; goto freeHotel; }
 
 	//Initialize the rooms semaphores and the global semaphores/mutes to the required values
 	err = SemaphoreIntialize(my_hotel, number_of_costumers);
-	if (err == ERROR_CODE) ret = ERROR_CODE; goto freeHotelAndCostumers;
+	if (err == ERROR_CODE) { ret = ERROR_CODE; goto freeHotelAndCostumers; }
 
 	//for each costumer find his room
 	err = FindMyRoom(my_hotel, costumers, number_of_costumers);
-	if (err == ERROR_CODE) ret = ERROR_CODE; goto freeHotelCostumersAndHandles;
+	if (err == ERROR_CODE) { ret = ERROR_CODE; goto freeHotelCostumersAndHandles; }
 
 	// create the arguments for costumer thread and god thread
 	err = CreateCostumersAndGodArg(my_hotel, costumers, number_of_costumers, &c_arg, &g_arg);
-	if (err == ERROR_CODE) ret = ERROR_CODE; goto freeHotelCostumersAndHandles;
+	if (err == ERROR_CODE) { ret = ERROR_CODE; goto freeHotelCostumersAndHandles; }
 
 	//create the thread that write to roomLog
 	err = CreateThreads(c_arg, g_arg);
-	if (err == ERROR_CODE) ret = ERROR_CODE; goto freeAll;
+	if (err == ERROR_CODE) { ret = ERROR_CODE; goto freeAll; }
 
 
 
