@@ -389,7 +389,7 @@ int runHotel()
 	Costumer_arg **c_arg = NULL;
 	God_arg *g_arg = NULL;
 	char *path = NULL;
-	int number_of_costumers = 0, err = 0, wait_res = 0, j = 0, ret =0;
+	int number_of_costumers = 0, err = 0, wait_res = 0, j = 0, ret = 0;
 
 
 	//fill up hotel structure according to the rooms.txt file
